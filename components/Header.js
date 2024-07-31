@@ -9,6 +9,7 @@ const StyledHeader = styled.header`
 const Logo = styled(Link) `
     color: #fff;
     text-decoration: none;
+    font-size: 2rem;
 `;
 
 const Wrapper = styled.div`
@@ -20,6 +21,7 @@ const Wrapper = styled.div`
 const NavLink = styled(Link)`
     color: #aaa;
     text-decoration: none;
+    
 `;
 
 const StyledNav = styled.nav`
