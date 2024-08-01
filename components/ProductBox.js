@@ -1,8 +1,9 @@
 import styled from "styled-components"
 import Button from "./Button";
 import CartIcon from "@/icons/CartIcon";
+import Link from "next/link";
 
-const WhiteBox = styled.div`
+const WhiteBox = styled(Link)`
     background-color: #fff;
     padding: 2%;
     height: 150px;
@@ -19,24 +20,49 @@ const WhiteBox = styled.div`
 `;
 
 const ProductWrapper = styled.div`
-     
 `;
 
-const Title = styled.h2`
+const Title = styled(Link)`
     font-weight: normal;
     font-size: 0.9rem;
-    margin: 5px;
+    font-weight: bold;
     max-width: 100%;
+    color: inherit;
+    text-decoration: none;
 `;
 
+const ProductInfoBox  = styled.div`
+     margin-top: 10px;
+`;
+
+const Price = styled.div`
+    font-size: 1rem;
+    font-weight: bold;
+`;
+const PriceRow = styled.div`
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-content: space-between;
+`;
+
+
 export default function ProductBox({product}){
+    const url = '/product/'+product._id;
     return(
         <ProductWrapper>
-            <WhiteBox>
+            <WhiteBox href = {url}>
                 <img src = {product.images[0]} alt = ""/>
             </WhiteBox>
-            <Title>{product.title}</Title>
-            <Button primary><CartIcon/></Button>
+            <ProductInfoBox>
+                <Title href = {url}>{product.title}</Title>
+                <PriceRow>
+                    <Price>
+                        ₹{product.price}
+                    </Price>
+                    <Button primary outline>Add to Cart</Button>
+                </PriceRow>
+            </ProductInfoBox>
         </ProductWrapper>
     )
 }
