@@ -41,6 +41,10 @@ const ButtonsWrapper = styled.div`
     display: flex;
     gap: 10px;
     margin-top: 25px;
+
+    @media (max-width: 768px){
+        flex-direction: column;
+    }
 `;
 export default function Featured({product}){
     return (
