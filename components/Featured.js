@@ -4,6 +4,8 @@ import PrimaryBtn from "./Button";
 import Button from "./Button";
 import ButtonLink from "./ButtonLink";
 import CartIcon from "@/icons/CartIcon";
+import { useContext } from "react";
+import { CartContext } from "./CartContext";
 
 const Bg = styled.div`
     background-color: #222;
@@ -46,7 +48,11 @@ const ButtonsWrapper = styled.div`
         flex-direction: column;
     }
 `;
+
+
 export default function Featured({product}){
+    const {addProduct} =  useContext(CartContext);
+
     return (
         <Bg>
            <Center>
@@ -57,7 +63,7 @@ export default function Featured({product}){
                         <Desc>{product.description}</Desc>
                             <ButtonsWrapper>
                             <ButtonLink href = {'/products/'+product._id} outline = {1} white = {1} size = "l">Read More</ButtonLink>
-                            <Button primary = {1} size = "l">
+                            <Button primary = {1} size = "l" onClick = {() => {addProduct(product._id)}}>
                             <CartIcon/>
                             Add to cart </Button>
                             </ButtonsWrapper>
