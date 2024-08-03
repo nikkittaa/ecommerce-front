@@ -29,6 +29,7 @@ const NavLink = styled(Link)`
     color: #aaa;
     text-decoration: none;
     font-size: 1rem;
+    padding-top: 10px;
 
     @media (max-width: 768px){
             font-size: 0.8rem;
@@ -56,7 +57,7 @@ export default function Header(){
                         <NavLink href = {'/products'}>All Products</NavLink>
                         <NavLink href = {'/categories'}>Categories</NavLink>
                         <NavLink href = {'/account'}>Account</NavLink>
-                        <NavLink href = {'/cart'}>Cart ({cartProducts.length})</NavLink>
+                        <NavLink href = {'/cart'}>Cart ({cartProducts?.length})</NavLink>
                     </StyledNav>
                 </Wrapper>
             </Center>       
