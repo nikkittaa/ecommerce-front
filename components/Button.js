@@ -37,6 +37,11 @@ export const ButtonStyle = css`
             height: 20px;
         }
     `}
+
+    ${props => props.block && css`
+        width: 100%;
+        display: block;
+    `}
     ${props => props.primary && props.outline &&  css`
         background-color: transparent;
         color: ${primary};
