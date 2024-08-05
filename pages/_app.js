@@ -1,4 +1,5 @@
 import { CartContextProvider } from "@/components/CartContext";
+import { SnackbarProvider } from "notistack";
 import { createGlobalStyle } from "styled-components";
 
 const GlobalStyles = createGlobalStyle`
@@ -14,10 +15,12 @@ const GlobalStyles = createGlobalStyle`
 export default function App({ Component, pageProps }) {
   return (
     <>
+      <SnackbarProvider>
       <GlobalStyles/>
       <CartContextProvider>
         <Component {...pageProps} />
       </CartContextProvider>
+      </SnackbarProvider>
     </>
   );
 }

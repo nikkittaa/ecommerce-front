@@ -1,3 +1,4 @@
+import { useSnackbar } from 'notistack';
 import { createContext, useEffect, useState } from 'react';
 
 export const CartContext = createContext({});
@@ -6,6 +7,7 @@ export const CartContext = createContext({});
 export function CartContextProvider({children}){
     const ls = typeof window !== "undefined" ? localStorage : null;
     const [cartProducts, setCartProducts] = useState([]);
+    const {enqueueSnackbar} = useSnackbar();
 
     useEffect(() => {
         if(cartProducts?.length > 0){
@@ -22,6 +24,7 @@ export function CartContextProvider({children}){
 
     function addProduct(productId){
         setCartProducts(prev => [...prev, productId]);
+        enqueueSnackbar("Added to cart!", {variant : "success", autoHideDuration: 2000});
     }
 
     function removeProduct(productId){
@@ -31,6 +34,7 @@ export function CartContextProvider({children}){
                 return prev.filter((val, ind) => ind !== pos);
             }else return prev;
         });
+        
     }
     return(
         <CartContext.Provider value = {{cartProducts, setCartProducts, addProduct, removeProduct}}>
