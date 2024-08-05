@@ -24,6 +24,7 @@ const Box = styled.div`
     background-color: #fff;
     border-radius: 10px;
     padding: 30px;
+    
 `;
 
 const Empty = styled.div`
@@ -56,14 +57,27 @@ const ProductImageBox = styled.div`
     }
 `;
 
+const QuantityLabel = styled.span`
+    padding: 0 3px;
+`;
+
 export default function CartPage(){
-    const {cartProducts} = useContext(CartContext); 
+    const {cartProducts, addProduct, removeProduct} = useContext(CartContext); 
     const [products, setProducts] = useState([]);
     useEffect(() => {
         axios.post('/api/cart', {ids : cartProducts}).then(response => {
             setProducts(response.data);
         })
     }, [cartProducts]);
+
+    function moreOfThisProduct(id){
+        addProduct(id);
+    }
+
+    function lessOfThisProduct(id){
+        removeProduct(id);
+    }
+
     return(
         <>
             <Header/>
@@ -93,9 +107,16 @@ export default function CartPage(){
                                         <ProductImageBox><img src = {product.images[0]} alt = ""/></ProductImageBox>
                                         <div>{product.title}</div>
                                     </ProductInfoCell> 
-                                    <td> {cartProducts.filter(id => id ===
-                                        product._id).length}</td>
-                                    <td>{product.price}</td>
+                                    <td>
+                                    <Button size = "s" onClick = {() => lessOfThisProduct(product._id)}>-</Button>
+                                    <QuantityLabel>{cartProducts.filter(id => id ===
+                                        product._id).length}</QuantityLabel>
+                                     <Button size = "s" onClick = {() => moreOfThisProduct(product._id)}>+</Button>   
+                                    </td>
+                                    <td>₹ {cartProducts.filter(id => id ===
+                                        product._id).length *product.price}<br/>
+                                        Unit Price : {product.price}
+                                        </td>
                                 </tr>
                             ))}
                             </tbody>

@@ -38,6 +38,12 @@ export const ButtonStyle = css`
         }
     `}
 
+    ${props => props.size === "s" && css`
+        font-size: 0.8rem;
+        padding: 5px 5px;
+        
+    `}
+
     ${props => props.block && css`
         width: 100%;
         display: block;
