@@ -69,8 +69,8 @@ export default function CartPage(){
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
-    const [street, setStreet] = useState('');
-    const [postal, setPostal] = useState('');
+    const [streetAddress, setStreet] = useState('');
+    const [postalCode, setPostal] = useState('');
     const [country, setCountry] = useState('');
 
     useEffect(() => {
@@ -87,12 +87,39 @@ export default function CartPage(){
         removeProduct(id);
     }
 
+    async function  goToPayment(){
+        const response = await axios.post('/api/checkout/' ,{
+            name, email, city, streetAddress, postalCode, country,
+            cartProducts,
+        });
+
+        if(response.data.url){
+            window.location = response.data.url;
+        }
+    }
+
     let total = 0;
     for(const productId of cartProducts){
         const price = products.find(p => p._id === productId)?.price || 0;
         total += price;
     }
 
+    if(window.location.href.includes('success')){
+        return(
+            <>
+                <Header/>
+                <Center>
+                    <ColumnsWrapper>
+                        <Box>
+                        <h1>Thanks for your order!</h1>
+                        <p>We'll email you the details regarding your order!</p>
+                        <ButtonLink primary href = {'/'}>Shop More!</ButtonLink>
+                        </Box>
+                    </ColumnsWrapper>
+                </Center>
+            </>
+        )
+    }
     return(
         <>
             <Header/>
@@ -146,7 +173,7 @@ export default function CartPage(){
                 {!!cartProducts?.length && (
                     <Box>
                     <h2>Order Information</h2>
-                    <form method = "post" action = '/api/checkout'>
+                   
                         <Input required type = "text" 
                             placeholder = "Name" 
                             value = {name} 
@@ -164,7 +191,7 @@ export default function CartPage(){
                             onChange ={ev => setEmail(ev.target.value)}/>
                         <Input required type = "text" 
                             placeholder = "Street Address" 
-                            value = {street} 
+                            value = {streetAddress} 
                             name = "street"
                             onChange ={ev => setStreet(ev.target.value)}/>
                         <Input required type = "text" 
@@ -174,7 +201,7 @@ export default function CartPage(){
                             onChange ={ev => setCity(ev.target.value)}/>
                         <Input required type = "text" 
                             placeholder = "Postal Code" 
-                            value = {postal}
+                            value = {postalCode}
                             name = "postal" 
                             onChange ={ev => setPostal(ev.target.value)}/>
                         <Input required type = "text" 
@@ -185,8 +212,9 @@ export default function CartPage(){
                         <input type = 'hidden' 
                             name = 'products'
                             value = {cartProducts.join(',')}/>
-                        <Button type = "submit" block primary>Continue to payment</Button>
-                    </form>
+                        <Button type = "submit" block primary 
+                            onClick = {goToPayment}>Continue to payment</Button>
+                   
                 </Box>
                 )}
             </ColumnsWrapper>

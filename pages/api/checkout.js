@@ -10,12 +10,12 @@ export default async function handler(req, res){
     }
 
     const {name, phone, 
-        email, street,
-         city, postal, country, products} = req.body;
+        email, streetAddress,
+         city, postalCode, country, cartProducts} = req.body;
 
     await mongooseConnect();
     
-    const productsIds = products.split(',');
+    const productsIds = cartProducts;
     const uniqueIds = [...new Set(productsIds)];
     const productsInfos = await Product.find({_id: uniqueIds});
     
@@ -29,7 +29,7 @@ export default async function handler(req, res){
                 price_data : {
                     currency: 'INR',
                     product_data: {name : info.title},
-                    unit_amount: quantity*info.price,
+                    unit_amount: info.price*100,
                 },
             });
             
@@ -45,7 +45,7 @@ export default async function handler(req, res){
         mode: 'payment',
         customer_email: email,
         success_url: process.env.PUBLIC_URL +'/cart?success=1',
-        cancel_url: process_env_PUBLIC_URL + '/cart?canceled=1',
+        cancel_url: process.env.PUBLIC_URL + '/cart?canceled=1',
         metadata: {orderId: orderDoc._id.toString()}
     });
 
