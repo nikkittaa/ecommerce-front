@@ -63,7 +63,7 @@ const QuantityLabel = styled.span`
 `;
 
 export default function CartPage(){
-    const {cartProducts, addProduct, removeProduct} = useContext(CartContext); 
+    const {cartProducts, addProduct, removeProduct, clearCart} = useContext(CartContext); 
     const [products, setProducts] = useState([]);
     const [name, setName] = useState('');
     const [phone, setPhone] = useState('');
@@ -72,12 +72,28 @@ export default function CartPage(){
     const [streetAddress, setStreet] = useState('');
     const [postalCode, setPostal] = useState('');
     const [country, setCountry] = useState('');
+    const [isSuccess,setIsSuccess] = useState(false);
 
     useEffect(() => {
-        axios.post('/api/cart', {ids : cartProducts}).then(response => {
-            setProducts(response.data);
-        })
+        if (cartProducts.length > 0) {
+            axios.post('/api/cart', {ids:cartProducts})
+              .then(response => {
+                setProducts(response.data);
+              })
+          } else {
+            setProducts([]);
+          }
     }, [cartProducts]);
+
+    useEffect(() => {
+        if (typeof window === 'undefined') {
+            return;
+          }
+          if (window?.location.href.includes('success')) {
+            setIsSuccess(true);
+            clearCart();
+          }
+    });
 
     function moreOfThisProduct(id){
         addProduct(id);
@@ -104,22 +120,25 @@ export default function CartPage(){
         total += price;
     }
 
-    if(window.location.href.includes('success')){
-        return(
-            <>
-                <Header/>
-                <Center>
-                    <ColumnsWrapper>
-                        <Box>
-                        <h1>Thanks for your order!</h1>
-                        <p>We'll email you the details regarding your order!</p>
-                        <ButtonLink primary href = {'/'}>Shop More!</ButtonLink>
-                        </Box>
-                    </ColumnsWrapper>
-                </Center>
-            </>
-        )
+   
+    if(isSuccess){
+            return(
+                <>
+                    <Header/>
+                    <Center>
+                        <ColumnsWrapper>
+                            <Box>
+                            <h1>Thanks for your order!</h1>
+                            <p>We'll email you the details regarding your order!</p>
+                            <ButtonLink primary href = {'/'}>Shop More!</ButtonLink>
+                            </Box>
+                        </ColumnsWrapper>
+                    </Center>
+                </>
+            )
     }
+    
+    
     return(
         <>
             <Header/>
